@@ -1,19 +1,26 @@
 version: "3"
 
 services:
-    client:
-        image: nginx
+    reverseproxy:
+        build: ./proxy
         ports:
-            - 8000:80
+            - 8080:80
+            - 5000:5000
+
+    client:
+        depends_on: 
+            - reverseproxy
+        image: nginx
         volumes:
             - ./src:/usr/share/nginx/html
+
     web:
         build: .
-        ports:
-            - "5000:5000"
         volumes:
             - .:/code
         depends_on:
             - redis
+            - reverseproxy
+
     redis:
         image: redis
