@@ -6,27 +6,24 @@ services:
         ports:
             - 8080:8080
         depends_on:
-            - WEB
-            - APP
+            - web
+            - app
 
-    WEB:
-        depends_on: 
-            - reverseproxy
+    web:
         image: nginx
         ports:
             - 80:80
         volumes:
             - ./src:/usr/share/nginx/html
 
-    APP:
+    app:
         build: ./App
         volumes:
-            - .:/code
+            - ./App:/code
         ports:
             - 5000:5000
         depends_on:
             - redis
-            - reverseproxy
 
     redis:
         image: redis
