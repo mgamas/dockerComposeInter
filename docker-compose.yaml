@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+    reverseproxy:
+        build: ./proxy
+        ports:
+            - 8080:8080
+        depends_on:
+            - WEB
+            - APP
+
+    WEB:
+        depends_on: 
+            - reverseproxy
+        image: nginx
+        ports:
+            - 80:80
+        volumes:
+            - ./src:/usr/share/nginx/html
+
+    APP:
+        build: ./App
+        volumes:
+            - .:/code
+        ports:
+            - 5000:5000
+        depends_on:
+            - redis
+            - reverseproxy
+
+    redis:
+        image: redis
