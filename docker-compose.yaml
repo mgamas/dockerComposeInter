@@ -5,28 +5,22 @@ services:
         build: ./proxy
         ports:
             - 8080:8080
-        depends_on:
-            - WEB
-            - APP
+            - 5000:5000
+        links:
+            - client
+            - web
 
-    WEB:
-        depends_on: 
-            - reverseproxy
+    client:
         image: nginx
-        ports:
-            - 80:80
         volumes:
             - ./src:/usr/share/nginx/html
 
-    APP:
-        build: ./App
+    web:
+        build: .
         volumes:
             - .:/code
-        ports:
-            - 5000:5000
         depends_on:
             - redis
-            - reverseproxy
 
     redis:
         image: redis
