@@ -4,7 +4,7 @@ services:
     reverseproxy:
         build: ./proxy
         ports:
-            - 8080:80
+            - 80:80
             - 5000:5000
 
     client:
